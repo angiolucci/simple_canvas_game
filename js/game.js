@@ -31,7 +31,31 @@ monsterImage.src = "images/monster.png";
 
 // Game objects
 var hero = {
-	speed: 256 // movement in pixels per second
+	speed: 256, // movement in pixels per second
+
+	moveUp: function (timeFactor){
+		var d = timeFactor * this.speed;
+		if ( this.y - d > 32 )
+			this.y -= d;
+	},
+
+	moveDown: function (timeFactor){
+		var d = timeFactor * this.speed;
+		if ( this.y + d < canvas.height - 64 )
+			this.y += d;
+	},
+
+	moveLeft: function (timeFactor){
+		var d = timeFactor * this.speed;
+		if ( this.x - d > 32 )
+			this.x -= d;
+	},
+
+	moveRight: function (timeFactor){
+		var d = timeFactor * this.speed;
+		if ( this.x + d < canvas.width - 64 )
+			this.x += d;
+		}
 };
 var monster = {};
 var monstersCaught = 0;
@@ -60,16 +84,16 @@ var reset = function () {
 // Update game objects
 var update = function (modifier) {
 	if (38 in keysDown) { // Player holding up
-		hero.y -= hero.speed * modifier;
+		hero.moveUp(modifier);
 	}
 	if (40 in keysDown) { // Player holding down
-		hero.y += hero.speed * modifier;
+		hero.moveDown(modifier);
 	}
 	if (37 in keysDown) { // Player holding left
-		hero.x -= hero.speed * modifier;
+		hero.moveLeft(modifier);
 	}
 	if (39 in keysDown) { // Player holding right
-		hero.x += hero.speed * modifier;
+		hero.moveRight(modifier);
 	}
 
 	// Are they touching?
@@ -100,7 +124,7 @@ var render = function () {
 
 	// Score
 	ctx.fillStyle = "rgb(250, 250, 250)";
-	ctx.font = "24px Helvetica";
+	ctx.font = "bold 18px Courier";
 	ctx.textAlign = "left";
 	ctx.textBaseline = "top";
 	ctx.fillText("Goblins caught: " + monstersCaught, 32, 32);
